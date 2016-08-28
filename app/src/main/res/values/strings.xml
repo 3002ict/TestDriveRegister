@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">TestDriveRegister</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_driver_details">DriverDetailsActivity</string>
+    <string name="driverDetailsTitle">Driver Details</string>
+    <string name="driverDetailsSubtitle">Please type driver\'s details</string>
+    <string name="driverNameHint">Name</string>
+    <string name="emailHint">Email</string>
+    <string name="phoneHint">Phone</string>
+    <string name="licenceHint">Licence Number</string>
+    <string name="driverDetailsButton">Next</string>
+    <string name="title_activity_agreement">AgreementActivity</string>
+    <string name="agreementTitle">Agreement</string>
+    <string name="agreementCheckBox">I accept the terms in the Agreement</string>
+    <string name="agreementButton">Next</string>
+    <string name="title_activity_time_count">TimeCountActivity</string>
+    <string name="stopButton">Stop</string>
+    <string name="signInButton">Sign In</string>
+    <string name="title_activity_result">ResultActivity</string>
+    <string name="resultButton">Done</string>
+    <string name="auth_failed">Authentication failed</string>
+    <string name="sign_in_succeeded">Successfully signed in</string>
+    <string name="title_activity_staff_info">StaffInfoActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="nextButton">NEXT</string>
+    <string name="startSubtitle">Push button to start new test drive</string>
+    <string name="startButton">Confirm &amp; Start</string>
+
+
+    <string name="title_activity_start_drive">StartDriveActivity</string>
+    <string name="title_activity_drive">DriveActivity</string>
+    <string name="finishButton">Finish</string>
+    <string name="alertFinishDriveMessage">Finish Test Drive?</string>
+    <string name="submitButton">Submit</string>
+</resources>
