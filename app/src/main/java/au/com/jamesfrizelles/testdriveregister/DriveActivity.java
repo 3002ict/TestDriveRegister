@@ -22,8 +22,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import android.os.Handler;
+import android.widget.Toast;
 
-public class DriveActivity extends AppCompatActivity {
+public class DriveActivity extends BaseActivity {
     private Context context;
     private String TAG;
     private Handler handler;
@@ -33,6 +34,10 @@ public class DriveActivity extends AppCompatActivity {
     private DriveTimer dtimer;
     private ScheduledFuture future;
     private ScheduledExecutorService exec;
+    private String startTimeText;
+    private String endTimeText;
+    private DateFormat df;
+    private boolean doubleBackToExitPressedOnce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,42 +53,26 @@ public class DriveActivity extends AppCompatActivity {
         handler = new Handler(getMainLooper());
         dtimer = new DriveTimer();
         exec = Executors.newSingleThreadScheduledExecutor();
+        doubleBackToExitPressedOnce = false;
 
         //set timer
         future = exec.scheduleAtFixedRate(dtimer, 0, 1000, TimeUnit.MILLISECONDS);
 
 
         //show start time
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        startTimeTextView.setText(df.format(date));
+        df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        startTimeText = df.format(date);
+        startTimeTextView.setText(startTimeText);
 
-
+        //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Test Drive Register");
         setSupportActionBar(toolbar);
 
-    }
+        //firebase auth check
+        initFirebaseAuth();
+        addAuthStateListener(context);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.menu) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -140,11 +129,71 @@ public class DriveActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // OK button pressed
                         Intent intent = new Intent(context, ReviewActivity.class);
+                        intent.putExtra("startTime", startTimeText);
+                        Date currentDate = new Date(System.currentTimeMillis());
+                        endTimeText = df.format(currentDate);
+                        intent.putExtra("endTime", endTimeText);
                         startActivity(intent);
                         finish();
                     }
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.menu:
+                break;
+            case R.id.menu_logout:
+                signOut();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        addAuthStateListener(context);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        removeAuthStateListener();
     }
 }

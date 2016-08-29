@@ -33,4 +33,5 @@
     <string name="finishButton">Finish</string>
     <string name="alertFinishDriveMessage">Finish Test Drive?</string>
     <string name="submitButton">Submit</string>
+    <string name="database_error">Failed to read data</string>
 </resources>

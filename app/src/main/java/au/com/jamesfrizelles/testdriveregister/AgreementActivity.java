@@ -20,7 +20,7 @@ import android.widget.EditText;
 
 import au.com.jamesfrizelles.testdriveregister.models.Drive;
 
-public class AgreementActivity extends AppCompatActivity {
+public class AgreementActivity extends BaseActivity {
     private Context context;
     private String TAG;
     private WebView webView;
@@ -75,6 +75,7 @@ public class AgreementActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });
@@ -82,6 +83,10 @@ public class AgreementActivity extends AppCompatActivity {
         //get drive object
         Intent intent = getIntent();
         drive = (Drive) intent.getSerializableExtra("drive");
+
+        //firebase auth check
+        initFirebaseAuth();
+        addAuthStateListener(context);
     }
 
     @Override
@@ -98,9 +103,12 @@ public class AgreementActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.menu) {
-            return true;
+        switch (id){
+            case R.id.menu:
+                break;
+            case R.id.menu_logout:
+                signOut();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -113,17 +121,33 @@ public class AgreementActivity extends AppCompatActivity {
     public void onClickContinue(View view){
         Intent intent = new Intent(context, StartDriveActivity.class);
         intent.putExtra("drive", drive);
-        startActivityForResult(intent, 2);
+        startActivityForResult(intent, 300);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 2){
-            //finish DriverDetailsActivity
-            finishActivity(1);
-            //finish this activity
-            finish();
+        if(requestCode == 300){
+            switch (resultCode){
+                case RESULT_OK:
+                    setResult(RESULT_OK);
+                    finish();
+                    break;
+                case RESULT_CANCELED:
+                    break;
+            }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        removeAuthStateListener();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        addAuthStateListener(context);
     }
 }

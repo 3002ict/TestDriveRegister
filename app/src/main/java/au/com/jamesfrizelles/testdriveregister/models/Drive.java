@@ -21,7 +21,7 @@ public class Drive implements Serializable {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Drive(String drivername, String licence, String phone, String email, String uerId, String username) {
+    public Drive(String drivername, String licence, String phone, String email, String userId, String username) {
         this.drivername = drivername;
         this.licence = licence;
         this.phone = phone;
