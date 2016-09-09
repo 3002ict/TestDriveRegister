@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Let&apos;s start test drive"
+        android:text="All OK, Let&apos;s start the test drive"
         android:id="@+id/textView4"
         android:layout_margin="10dp" />
 

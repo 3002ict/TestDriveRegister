@@ -6,8 +6,9 @@
     <string name="driverDetailsSubtitle">Please type driver\'s details</string>
     <string name="driverNameHint">Name</string>
     <string name="emailHint">Email</string>
-    <string name="phoneHint">Phone</string>
-    <string name="licenceHint">Licence Number</string>
+    <string name="phoneHint">Phone Number</string>
+    <string name="licenceHint">License Number</string>
+    <string name="regoHint">Rego Number</string>
     <string name="driverDetailsButton">Next</string>
     <string name="title_activity_agreement">AgreementActivity</string>
     <string name="agreementTitle">Agreement</string>
@@ -26,12 +27,37 @@
     <string name="nextButton">NEXT</string>
     <string name="startSubtitle">Push button to start new test drive</string>
     <string name="startButton">Confirm &amp; Start</string>
-
-
     <string name="title_activity_start_drive">StartDriveActivity</string>
     <string name="title_activity_drive">DriveActivity</string>
     <string name="finishButton">Finish</string>
-    <string name="alertFinishDriveMessage">Finish Test Drive?</string>
+    <string name="alertFinishDriveMessage">Finish the test drive?</string>
     <string name="submitButton">Submit</string>
-    <string name="database_error">Failed to read data</string>
+    <string name="database_error">Failed to read data. Try again</string>
+    <string name="carModelHint">Car Model</string>
+    <string name="streetHint">Street Address</string>
+    <string name="suburbHint">Suburb</string>
+    <string name="postcodeHint">Postcode</string>
+    <string name="submission_failed">Submission failed</string>
+    <string-array name="states_array">
+        <item>QLD</item>
+        <item>NSW</item>
+        <item>VIC</item>
+        <item>TAS</item>
+        <item>SA</item>
+        <item>WA</item>
+        <item>NT</item>
+        <item>ACT</item>
+    </string-array>
+    <string-array name="makes_array">
+        <item>Audi</item>
+        <item>VW</item>
+        <item>Mazda</item>
+        <item>Jaguar</item>
+        <item>Land Rover</item>
+        <item>Hyundai</item>
+        <item>Chrysler</item>
+        <item>Jeep</item>
+        <item>Dodge</item>
+        <item>Isuzu</item>
+    </string-array>
 </resources>

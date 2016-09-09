@@ -104,6 +104,110 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Rego Number:"
+                    android:layout_margin="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="JAMES123"
+                    android:id="@+id/regoTextView"
+                    android:layout_margin="10dp"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="License Number:"
+                    android:layout_margin="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="12345678"
+                    android:id="@+id/licenceTextView"
+                    android:layout_margin="10dp"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Mailing Address:"
+                android:layout_margin="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Corner of Nind Street and High Street, Southport Queensland 4215"
+                android:id="@+id/addressTextView"
+                android:layout_margin="10dp"
+                android:textSize="18dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Car Make:"
+                    android:layout_margin="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Audi"
+                    android:id="@+id/carMakeTextView"
+                    android:layout_margin="10dp"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Car Model:"
+                    android:layout_margin="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="2012 AUDI TT S TRONIC QUATTRO COUPE"
+                    android:id="@+id/carModelTextView"
+                    android:layout_margin="10dp"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,7 +218,8 @@
                 android:layout_marginRight="50dp"
                 android:textSize="20dp"
                 android:onClick="onClickStartDrive"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp" />
 
         </LinearLayout>
     </ScrollView>

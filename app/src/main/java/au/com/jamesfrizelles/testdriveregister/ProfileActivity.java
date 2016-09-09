@@ -88,6 +88,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DriverDetailsActivity.class);
+                intent.putExtra("username", user.name);
                 startActivityForResult(intent, 100);
             }
         });

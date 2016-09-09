@@ -48,7 +48,12 @@ public class AgreementActivity extends BaseActivity {
         continueButton.setVisibility(View.GONE);
 
         //web view settings
-        webView.loadUrl("http://jamesfrizelles.com.au/");
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setBuiltInZoomControls(true);
+
+        webView.loadUrl("https://testdriveregister-4ef26.firebaseapp.com/#/agreement");
+//        webView.setInitialScale(150);
 
         //check box settings
         checked = false;

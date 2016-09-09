@@ -9,10 +9,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Thanks for taking the test drive!"
+        android:id="@+id/textView7"
+        android:layout_margin="10dp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Thank you"
-        android:id="@+id/textView4"
-        android:layout_margin="10dp" />
+        android:text="We sent an email with the Agreement"
+        android:id="@+id/textView5"
+        android:layout_margin="10dp"
+        android:textAlignment="center" />
 
     <com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
         android:layout_width="50dp"

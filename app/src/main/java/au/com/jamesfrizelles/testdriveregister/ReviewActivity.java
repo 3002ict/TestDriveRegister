@@ -10,12 +10,28 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReviewActivity extends BaseActivity {
     private Context context;
@@ -25,6 +41,12 @@ public class ReviewActivity extends BaseActivity {
     private String startTime;
     private String endTime;
     private boolean doubleBackToExitPressedOnce;
+    private String key;
+    private RatingBar ratingBar;
+    private Float ratingVal;
+    private EditText commentsEditText;
+    private DatabaseReference mDatabase;
+
 
 
     @Override
@@ -43,8 +65,21 @@ public class ReviewActivity extends BaseActivity {
         startTimeTextView = (TextView) findViewById(R.id.startTimeTextView);
         endTimeTextView = (TextView) findViewById(R.id.endTimeTextView);
         doubleBackToExitPressedOnce = false;
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingVal = 0f;
+        commentsEditText = (EditText) findViewById(R.id.commnetsEditText);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        //set rating bar listener
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                ratingVal = v;
+            }
+        });
 
         Intent intent = getIntent();
+        key = intent.getStringExtra("key");
         startTime = intent.getStringExtra("startTime");
         endTime = intent.getStringExtra("endTime");
         startTimeTextView.setText(startTime);
@@ -57,22 +92,40 @@ public class ReviewActivity extends BaseActivity {
     }
 
     public void onClickSubmitReview(View view){
-        LayoutInflater factory = LayoutInflater.from(context);
-        final View v = factory.inflate(R.layout.dialog_confirmation, null);
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        showProgressDialog();
+        String comments = "";
+        comments += commentsEditText.getText().toString();
+        Map<String, Object> driveUpdates = new HashMap<>();
+        driveUpdates.put("/drives/" + key + "/rate", Float.toString(ratingVal));
+        driveUpdates.put("/drives/" + key + "/comments", comments);
+        driveUpdates.put("/drives/" + key + "/status", "pending");
+        mDatabase.updateChildren(driveUpdates, new DatabaseReference.CompletionListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                signOut();
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null){
+                    hideProgressDialog();
+                    Toast.makeText(context, R.string.submission_failed,
+                            Toast.LENGTH_SHORT).show();
+                }else {
+                    hideProgressDialog();
+                    sendEmail();
+                    LayoutInflater factory = LayoutInflater.from(context);
+                    final View v = factory.inflate(R.layout.dialog_confirmation, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            signOut();
+                        }
+                    });
+                    builder.setView(v);
+                    AlertDialog dialog = builder.create();
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.show();
+                }
             }
         });
-        builder.setView(v);
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-        dialog.show();
     }
 
     @Override
@@ -130,4 +183,34 @@ public class ReviewActivity extends BaseActivity {
         super.onStop();
         removeAuthStateListener();
     }
+
+    private void sendEmail(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("https://test-drive-mailer.herokuapp.com?key=" + key);
+                    HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                    String str = InputStreamToString(con.getInputStream());
+                    Log.d(TAG, "HTTP:" + str);
+                } catch(Exception ex) {
+                    System.out.println(ex);
+                }
+            }
+        }).start();
+
+    }
+
+    // InputStream -> String
+    static String InputStreamToString(InputStream is) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+        return sb.toString();
+    }
+
 }

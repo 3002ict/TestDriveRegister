@@ -16,6 +16,8 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -23,6 +25,10 @@ import java.util.concurrent.TimeUnit;
 
 import android.os.Handler;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class DriveActivity extends BaseActivity {
     private Context context;
@@ -38,6 +44,8 @@ public class DriveActivity extends BaseActivity {
     private String endTimeText;
     private DateFormat df;
     private boolean doubleBackToExitPressedOnce;
+    private String key;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +62,18 @@ public class DriveActivity extends BaseActivity {
         dtimer = new DriveTimer();
         exec = Executors.newSingleThreadScheduledExecutor();
         doubleBackToExitPressedOnce = false;
+        df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        //get values from previous activity
+        Intent intent = getIntent();
+        key = intent.getStringExtra("key");
+        startTimeText = intent.getStringExtra("startTime");
 
         //set timer
         future = exec.scheduleAtFixedRate(dtimer, 0, 1000, TimeUnit.MILLISECONDS);
 
-
         //show start time
-        df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        startTimeText = df.format(date);
         startTimeTextView.setText(startTimeText);
 
         //toolbar settings
@@ -128,13 +140,29 @@ public class DriveActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // OK button pressed
-                        Intent intent = new Intent(context, ReviewActivity.class);
-                        intent.putExtra("startTime", startTimeText);
+                        showProgressDialog();
                         Date currentDate = new Date(System.currentTimeMillis());
                         endTimeText = df.format(currentDate);
-                        intent.putExtra("endTime", endTimeText);
-                        startActivity(intent);
-                        finish();
+                        Map<String, Object> driveUpdates = new HashMap<>();
+                        driveUpdates.put("/drives/" + key + "/finish_drive", endTimeText);
+                        mDatabase.updateChildren(driveUpdates, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError != null){
+                                    hideProgressDialog();
+                                    Toast.makeText(context, R.string.submission_failed,
+                                            Toast.LENGTH_SHORT).show();
+                                }else{
+                                    hideProgressDialog();
+                                    Intent intent = new Intent(context, ReviewActivity.class);
+                                    intent.putExtra("startTime", startTimeText);
+                                    intent.putExtra("endTime", endTimeText);
+                                    intent.putExtra("key", key);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        });
                     }
                 })
                 .setNegativeButton("Cancel", null)
