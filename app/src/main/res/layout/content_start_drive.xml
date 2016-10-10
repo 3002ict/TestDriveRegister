@@ -18,26 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Licence:"
-                    android:layout_margin="10dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="12345"
-                    android:id="@+id/licenceTextView"
-                    android:layout_margin="10dp" />
-            </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -57,6 +38,27 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="James"
                     android:id="@+id/drivernameTextView"
+                    android:layout_margin="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Licence Number:"
+                    android:layout_margin="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="12345"
+                    android:id="@+id/licenceTextView"
                     android:layout_margin="10dp" />
             </LinearLayout>
 
@@ -102,50 +104,6 @@
                     android:layout_margin="10dp"
                     android:textSize="18dp" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Rego Number:"
-                    android:layout_margin="10dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="JAMES123"
-                    android:id="@+id/regoTextView"
-                    android:layout_margin="10dp"
-                    android:textSize="18dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="License Number:"
-                    android:layout_margin="10dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="12345678"
-                    android:id="@+id/licenceTextView"
-                    android:layout_margin="10dp"
-                    android:textSize="18dp" />
             </LinearLayout>
 
             <TextView
@@ -204,6 +162,28 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="2012 AUDI TT S TRONIC QUATTRO COUPE"
                     android:id="@+id/carModelTextView"
+                    android:layout_margin="10dp"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Rego Number:"
+                    android:layout_margin="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="JAMES123"
+                    android:id="@+id/regoTextView"
                     android:layout_margin="10dp"
                     android:textSize="18dp" />
             </LinearLayout>

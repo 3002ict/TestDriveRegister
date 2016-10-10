@@ -38,6 +38,11 @@
     <string name="suburbHint">Suburb</string>
     <string name="postcodeHint">Postcode</string>
     <string name="submission_failed">Submission failed</string>
+    <string name="resetPasswordButton">Forgot your password?</string>
+    <string name="sendEmailButton">Send Email</string>
+    <string name="cancelPasswordResetButton">Cancel</string>
+    <string name="email_sent">Email sent.</string>
+    <string name="email_failed">Failed to send email.</string>
     <string-array name="states_array">
         <item>QLD</item>
         <item>NSW</item>

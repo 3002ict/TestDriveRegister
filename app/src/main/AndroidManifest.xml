@@ -43,7 +43,8 @@
         <activity
             android:name=".ReviewActivity"
             android:label="@string/title_activity_result"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".PasswordResetActivity"></activity>
     </application>
 
 </manifest>

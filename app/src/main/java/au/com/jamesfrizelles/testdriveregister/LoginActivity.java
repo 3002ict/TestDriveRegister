@@ -156,4 +156,9 @@ public class LoginActivity extends BaseActivity {
         }, 2000);
 
     }
+
+    public void onClickResetPassword(View view){
+        Intent intent = new Intent(context, PasswordResetActivity.class);
+        startActivity(intent);
+    }
 }

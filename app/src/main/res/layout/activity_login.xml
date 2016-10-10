@@ -22,7 +22,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="280dp"
                 android:id="@+id/imageView"
                 android:src="@drawable/frontpage"
                 android:layout_marginTop="50dp"
@@ -56,6 +56,18 @@
                     android:hint="Password" />
             </android.support.design.widget.TextInputLayout>
 
+
+            <Button
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resetPasswordButton"
+                android:id="@+id/resetPasswordButton"
+                android:layout_gravity="center_horizontal"
+                android:background="#00ffffff"
+                android:textColor="@color/primary_dark_material_light"
+                android:textAllCaps="false"
+                android:onClick="onClickResetPassword" />
 
             <Button
                 android:layout_width="match_parent"
