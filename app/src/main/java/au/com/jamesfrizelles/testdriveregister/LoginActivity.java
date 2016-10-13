@@ -83,13 +83,19 @@ public class LoginActivity extends BaseActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     // Get user value
                                     User user = dataSnapshot.getValue(User.class);
-                                    Toast.makeText(context, R.string.sign_in_succeeded,
-                                            Toast.LENGTH_SHORT).show();
+                                    if(user.enabled){
+                                        Toast.makeText(context, R.string.sign_in_succeeded,
+                                                Toast.LENGTH_SHORT).show();
 
-                                    Intent intent = new Intent(context, ProfileActivity.class);
-                                    intent.putExtra("user", user);
-                                    startActivity(intent);
-                                    finish();
+                                        Intent intent = new Intent(context, ProfileActivity.class);
+                                        intent.putExtra("user", user);
+                                        startActivity(intent);
+                                        finish();
+                                    }else{
+                                        Toast.makeText(context, R.string.auth_failed,
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+
                                     hideProgressDialog();
                                 }
 

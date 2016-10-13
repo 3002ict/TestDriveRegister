@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,6 +30,8 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import au.com.jamesfrizelles.testdriveregister.models.User;
 
 public class DriveActivity extends BaseActivity {
     private Context context;
@@ -46,6 +49,7 @@ public class DriveActivity extends BaseActivity {
     private boolean doubleBackToExitPressedOnce;
     private String key;
     private DatabaseReference mDatabase;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,6 @@ public class DriveActivity extends BaseActivity {
         //initialize values
         context = DriveActivity.this;
         TAG = "DriveActivity";
-        date = new Date(System.currentTimeMillis());
         startTimeTextView = (TextView) findViewById(R.id.startTimeTextView);
         currentTimeTextView = (TextView) findViewById(R.id.currentTimeTextView);
         handler = new Handler(getMainLooper());
@@ -69,12 +72,16 @@ public class DriveActivity extends BaseActivity {
         Intent intent = getIntent();
         key = intent.getStringExtra("key");
         startTimeText = intent.getStringExtra("startTime");
-
-        //set timer
+        user = (User) intent.getSerializableExtra("user");
         future = exec.scheduleAtFixedRate(dtimer, 0, 1000, TimeUnit.MILLISECONDS);
 
         //show start time
         startTimeTextView.setText(startTimeText);
+        try {
+            date = df.parse(startTimeText);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -145,6 +152,9 @@ public class DriveActivity extends BaseActivity {
                         endTimeText = df.format(currentDate);
                         Map<String, Object> driveUpdates = new HashMap<>();
                         driveUpdates.put("/drives/" + key + "/finish_drive", endTimeText);
+                        driveUpdates.put("/drives/" + key + "/status", "inProgress");
+                        driveUpdates.put("/users/" + getUid() + "/resume/" + key + "/status", "inProgress");
+                        driveUpdates.put("/users/" + getUid() + "/resume/" + key + "/finish_drive", endTimeText);
                         mDatabase.updateChildren(driveUpdates, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -158,6 +168,7 @@ public class DriveActivity extends BaseActivity {
                                     intent.putExtra("startTime", startTimeText);
                                     intent.putExtra("endTime", endTimeText);
                                     intent.putExtra("key", key);
+                                    intent.putExtra("user", user);
                                     startActivity(intent);
                                     finish();
                                 }

@@ -33,8 +33,10 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import au.com.jamesfrizelles.testdriveregister.models.User;
+
 public class ReviewActivity extends BaseActivity {
-    private Context context;
+    private Context context;private DatabaseReference mDatabase;
     private String TAG;
     private TextView startTimeTextView;
     private TextView endTimeTextView;
@@ -45,7 +47,8 @@ public class ReviewActivity extends BaseActivity {
     private RatingBar ratingBar;
     private Float ratingVal;
     private EditText commentsEditText;
-    private DatabaseReference mDatabase;
+
+    private User user;
 
 
 
@@ -79,6 +82,7 @@ public class ReviewActivity extends BaseActivity {
         });
 
         Intent intent = getIntent();
+        user = (User) intent.getSerializableExtra("user");
         key = intent.getStringExtra("key");
         startTime = intent.getStringExtra("startTime");
         endTime = intent.getStringExtra("endTime");
@@ -99,6 +103,8 @@ public class ReviewActivity extends BaseActivity {
         driveUpdates.put("/drives/" + key + "/rate", Float.toString(ratingVal));
         driveUpdates.put("/drives/" + key + "/comments", comments);
         driveUpdates.put("/drives/" + key + "/status", "pending");
+        driveUpdates.put("/users/" + getUid() + "/resume", null);
+
         mDatabase.updateChildren(driveUpdates, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

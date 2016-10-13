@@ -33,6 +33,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_action_car"
-        app:backgroundTint="#05af9f" />
+        android:background="@color/colorAccent" />
 
 </android.support.design.widget.CoordinatorLayout>

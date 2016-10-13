@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import au.com.jamesfrizelles.testdriveregister.models.Drive;
+import au.com.jamesfrizelles.testdriveregister.models.User;
 
 public class StartDriveActivity extends BaseActivity {
     private Context context;
@@ -43,6 +42,7 @@ public class StartDriveActivity extends BaseActivity {
     private DatabaseReference mDatabase;
     private String driveKey;
     private String startTime;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,6 @@ public class StartDriveActivity extends BaseActivity {
         carModelTextView = (TextView) findViewById(R.id.carModelTextView);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         String toolBarTitle = "Start Drive";
@@ -81,6 +80,7 @@ public class StartDriveActivity extends BaseActivity {
         //get drive object
         Intent intent = getIntent();
         drive = (Drive) intent.getSerializableExtra("drive");
+        user = (User) intent.getSerializableExtra("user");
 
         //set drive values for each text view
         licenceTextView.setText(drive.licence);
@@ -152,6 +152,8 @@ public class StartDriveActivity extends BaseActivity {
         Map<String, Object> driveValues = drive.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/drives/" + driveKey, driveValues);
+        childUpdates.put("/users/" + getUid() + "/resume/" + driveKey, driveValues);
+
         showProgressDialog();
         mDatabase.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
             @Override
@@ -171,6 +173,7 @@ public class StartDriveActivity extends BaseActivity {
                             Intent intent = new Intent(context, DriveActivity.class);
                             intent.putExtra("key", driveKey);
                             intent.putExtra("startTime", startTime);
+                            intent.putExtra("user", user);
                             startActivity(intent);
                             //finish this activity
                             setResult(RESULT_OK);

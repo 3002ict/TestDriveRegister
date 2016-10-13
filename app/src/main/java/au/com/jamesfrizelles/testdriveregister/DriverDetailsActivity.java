@@ -26,6 +26,7 @@ import com.google.firebase.auth.api.model.StringList;
 import java.io.Serializable;
 
 import au.com.jamesfrizelles.testdriveregister.models.Drive;
+import au.com.jamesfrizelles.testdriveregister.models.User;
 
 public class DriverDetailsActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
     private Context context;
@@ -43,7 +44,7 @@ public class DriverDetailsActivity extends BaseActivity implements AdapterView.O
     private Spinner carMakeSpinner;
     private String state;
     private String carMake;
-    private String username;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class DriverDetailsActivity extends BaseActivity implements AdapterView.O
         carMake = "Audi";
 
         Intent intent = getIntent();
-        username = intent.getStringExtra("username");
+        user = (User) intent.getSerializableExtra("user");
 
         //set adapter to spinner
         ArrayAdapter<CharSequence> stateAdapter = ArrayAdapter.createFromResource(context, R.array.states_array, android.R.layout.simple_spinner_item);
@@ -117,9 +118,10 @@ public class DriverDetailsActivity extends BaseActivity implements AdapterView.O
         }
 
         String address = street + ", " + suburb + ", " + state + " " + postcode;
-        Drive drive = new Drive(drivername, licence, phone, email, getUid(), username, rego, address, carMake, carModel, null, null, "in_progress");
+        Drive drive = new Drive(drivername, licence, phone, email, getUid(), user.name, rego, address, carMake, carModel, null, null, "started");
         Intent intent = new Intent(context, AgreementActivity.class);
         intent.putExtra("drive", drive);
+        intent.putExtra("user", user);
         startActivityForResult(intent, 200);
     }
 

@@ -1,6 +1,8 @@
 package au.com.jamesfrizelles.testdriveregister;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +30,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
+import au.com.jamesfrizelles.testdriveregister.models.Drive;
 import au.com.jamesfrizelles.testdriveregister.models.User;
 
 public class ProfileActivity extends BaseActivity {
@@ -38,6 +45,7 @@ public class ProfileActivity extends BaseActivity {
     private TextView userNameTextView;
     private User user;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private DatabaseReference mDatabase;
 
 
     @Override
@@ -51,9 +59,10 @@ public class ProfileActivity extends BaseActivity {
         doubleBackToExitPressedOnce = false;
         userNameTextView = (TextView) findViewById(R.id.userNameTextView);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         //receive user data from LoginActivity
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         user = (User) intent.getSerializableExtra("user");
 
         //set user info to Recycler View
@@ -88,7 +97,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DriverDetailsActivity.class);
-                intent.putExtra("username", user.name);
+                intent.putExtra("user", user);
                 startActivityForResult(intent, 100);
             }
         });
@@ -97,6 +106,72 @@ public class ProfileActivity extends BaseActivity {
         initFirebaseAuth();
         addAuthStateListener(context);
 
+        if(user.resume != null ){
+            final String driveKey;
+            final Drive drive;
+            Iterator it = user.resume.entrySet().iterator();
+            it.hasNext();
+            Map.Entry pair = (Map.Entry)it.next();
+            driveKey = pair.getKey().toString();
+
+            Object obj = pair.getValue();
+            if (obj instanceof HashMap) {
+                final  HashMap driveHashMap = (HashMap) obj;
+                final String status = driveHashMap.get("status").toString();
+
+
+                new AlertDialog.Builder(context)
+                        .setTitle("Resume Test Drive")
+                        .setMessage("You have uncompleted test drive. Do you want to continue?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK button pressed
+                                Log.d(TAG, status);
+                                if(status.equals("started") && driveHashMap.containsKey("start_drive")) {
+                                    Intent intentDrive = new Intent(context, DriveActivity.class);
+                                    intentDrive.putExtra("user", user);
+                                    intentDrive.putExtra("startTime", driveHashMap.get("start_drive").toString());
+                                    intentDrive.putExtra("key", driveKey);
+                                    startActivity(intentDrive);
+                                }else if(status.equals("inProgress") && driveHashMap.containsKey("start_drive") && driveHashMap.containsKey("finish_drive") ) {
+                                    Intent intentReview = new Intent(context, ReviewActivity.class);
+                                    intentReview.putExtra("user", user);
+                                    intentReview.putExtra("startTime", driveHashMap.get("start_drive").toString());
+                                    intentReview.putExtra("key", driveKey);
+                                    intentReview.putExtra("endTime", driveHashMap.get("finish_drive").toString());
+                                    startActivity(intentReview);
+                                    finish();
+                                }else{
+
+                                        Toast.makeText(context, "Invalid data.",
+                                                Toast.LENGTH_SHORT).show();
+
+                                    //Remove uncompleted data
+                                    Map<String, Object> driveUpdates = new HashMap<>();
+                                    driveUpdates.put("/users/" + getUid() + "/resume", null);
+                                }
+
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Cancel button pressed
+                                //Remove uncompleted data
+                                Map<String, Object> driveUpdates = new HashMap<>();
+                                driveUpdates.put("/users/" + getUid() + "/resume", null);
+                                mDatabase.updateChildren(driveUpdates);
+                            }
+                        })
+                        .show();
+            }
+
+            it.remove(); // avoids a ConcurrentModificationException
+
+
+        }
 
     }
 

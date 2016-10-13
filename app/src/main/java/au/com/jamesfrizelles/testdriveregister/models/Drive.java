@@ -23,6 +23,7 @@ public class Drive implements Serializable {
     public String status;
     public String start_drive;
     public String finish_drive;
+    public String key;
 
     public Drive() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -65,5 +66,11 @@ public class Drive implements Serializable {
 
         return result;
     }
+
+    public void setKey(String key){
+        this.key = key;
+    }
+
+    public String getKey(){return this.key;}
 
 }

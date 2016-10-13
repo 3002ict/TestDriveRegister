@@ -19,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import au.com.jamesfrizelles.testdriveregister.models.Drive;
+import au.com.jamesfrizelles.testdriveregister.models.User;
 
 public class AgreementActivity extends BaseActivity {
     private Context context;
@@ -29,6 +30,7 @@ public class AgreementActivity extends BaseActivity {
     private Button continueButton;
     private EditText licenceEditText;
     private Drive drive;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +54,7 @@ public class AgreementActivity extends BaseActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
 
-        webView.loadUrl("https://testdriveregister-4ef26.firebaseapp.com/#/agreement");
-//        webView.setInitialScale(150);
+        webView.loadUrl("https://testdriveregister-4ef26.firebaseapp.com/agreement");
 
         //check box settings
         checked = false;
@@ -88,6 +89,7 @@ public class AgreementActivity extends BaseActivity {
         //get drive object
         Intent intent = getIntent();
         drive = (Drive) intent.getSerializableExtra("drive");
+        user = (User) intent.getSerializableExtra("user");
 
         //firebase auth check
         initFirebaseAuth();
@@ -126,6 +128,7 @@ public class AgreementActivity extends BaseActivity {
     public void onClickContinue(View view){
         Intent intent = new Intent(context, StartDriveActivity.class);
         intent.putExtra("drive", drive);
+        intent.putExtra("user", user);
         startActivityForResult(intent, 300);
     }
 
